@@ -25,14 +25,21 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(main main.cpp)
 
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../Utils ${CMAKE_CURRENT_LIST_DIR}/../Utils/build)
+add_subdirectory(BinModel)
+add_subdirectory(Options)
+
+target_link_libraries(main PRIVATE BinModel Options Utils)
+
 enable_testing()
 
-add_executable(C1Tests ${CMAKE_CURRENT_LIST_DIR}/tests.cpp)
+add_executable(CPPNumerical ${CMAKE_CURRENT_LIST_DIR}/tests.cpp)
 
-target_link_libraries(
-    C1Tests
-  GTest::gtest_main
-)
+target_link_libraries(CPPNumerical BinModel)
+target_link_libraries(CPPNumerical Options)
+target_link_libraries(CPPNumerical Utils)
+
+target_link_libraries(CPPNumerical GTest::gtest_main)
 
 include(GoogleTest)
-gtest_discover_tests(C1Tests)
+gtest_discover_tests(CPPNumerical)
