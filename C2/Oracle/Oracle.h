@@ -50,4 +50,24 @@ class BearSpreadOracle: public EurOptionOracle
       double Payoff(double z);
 };
 
+class StrangleOpt: public EurOptionOracle
+{
+   private:
+      double K1; //parameter 1
+      double K2; //parameter 2
+   public:
+      StrangleOpt(double K1_, double K2_) : EurOptionOracle() {K1 = K1_; K2 = K2_;};
+      double Payoff(double z);
+};
+
+class ButterflyOpt: public EurOptionOracle
+{
+   private:
+      double K1; //parameter 1
+      double K2; //parameter 2
+   public:
+      ButterflyOpt(double K1_, double K2_) : EurOptionOracle() {K1 = K1_; K2 = K2_;};
+      double Payoff(double z);
+};
+
 #endif

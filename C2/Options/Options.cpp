@@ -70,3 +70,20 @@ double BearSpread::Payoff(double z)
    if (z<K2) return K2 - z;
    return 0.0;
 }
+
+double Strangle::Payoff(double z)
+{
+   if (z<=K1) return K1 - z;
+   if (z<=K2) return 0;
+   return z - K2;
+}
+
+double Butterfly::Payoff(double z)
+{
+   double intermediate = (K1 + K2)/2;
+   
+   if ((z > K1) && z <= intermediate) return z - K1;
+   if ((z > intermediate) && z <= K2) return K2 - z;
+   return 0;
+
+}
