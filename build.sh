@@ -6,5 +6,4 @@ then
     exit 1
 fi
 
-(cd build && cmake -Wno-dev "../$1" && make && ./bin/main)
-rm -r build && mkdir build
+(cd build && cmake -Wno-dev "../$1" && cmake --build . --target CPPNumerical && ./bin/CPPNumerical)
