@@ -1,5 +1,5 @@
-#include "Options01.h"
-#include "BinModel01.h"
+#include "Options.h"
+#include "BinModel.h"
 #include <iostream>
 #include <cmath>
 using namespace std;
@@ -25,13 +25,13 @@ int GetInputData(int& N, double& K)
 }
 
 double PriceByCRR(double S0, double U, double D,
-                  double R, int N, double K)
+                  double R, int N, double *K, double (*Payoff)(double z, double *K))
 {
    double q=RiskNeutProb(U,D,R);
    double Price[N+1];
    for (int i=0; i<=N; i++)
    {
-      Price[i]=CallPayoff(S(S0,U,D,N,i),K);
+      Price[i]=Payoff(S(S0,U,D,N,i),K);
    }
    for (int n=N-1; n>=0; n--)
    {
@@ -43,10 +43,31 @@ double PriceByCRR(double S0, double U, double D,
    return Price[0];
 }
 
-double CallPayoff(double z, double K)
+double CallPayoff(double z, double *K)
 {
-   if (z>K) return z-K;
+   if (z>K[0]) return z-K[0];
    return 0.0;
+}
+
+double PutPayoff(double z, double *K)
+{
+   if (z<K[0]) return K[0]-z;
+   return 0.0;
+}
+
+double DigitalCallPayoff(double z, double *K) {
+   if (z>K[0]) return 1;
+   return 0;
+}
+
+double DigitalPutPayoff(double z, double *K) {
+   if (z<K[0]) return 1;
+   return 0;
+}
+
+double DoubleDigital(double z, double *K) {
+   if ((z > K[0]) && (z < K[1])) return 1;
+   return 0;
 }
 
 // Exercise 1,3
@@ -56,14 +77,15 @@ double PriceByCRRWhile(
    double D, 
    double R, 
    int N, 
-   double K
+   double *K,
+   double (*Payoff)(double z, double *K)
 ) 
 {
    double q = RiskNeutProb(U, D, R);
    double Price[N+1];
    int index = 0;
    while (index <= N) {
-      Price[index] = CallPayoff(S(S0, U, D, N, index), K);
+      Price[index] = Payoff(S(S0, U, D, N, index), K);
       index += 1;
    }
 
@@ -83,14 +105,14 @@ double PriceByCRRWhile(
    return Price[0];
 }
 
-double PriceByCRRFormula(double S0, double U, double D, double R, int N, double K) {
+double PriceByCRRFormula(double S0, double U, double D, double R, int N, double *K, double (*Payoff)(double z, double *K)) {
    double q = RiskNeutProb(U, D, R);
    double price = 0;
 
    double N_fact = tgamma(N + 1);
    
    for (int i=0;i <= N;i++) {
-      price += (N_fact / (tgamma(i + 1) * tgamma(N - i + 1))) * pow(q, i) * pow(1 - q, N - i) * CallPayoff(S(S0, U, D, N, i), K);
+      price += (N_fact / (tgamma(i + 1) * tgamma(N - i + 1))) * pow(q, i) * pow(1 - q, N - i) * Payoff(S(S0, U, D, N, i), K);
    }
 
    return price / pow(1 + R, N);

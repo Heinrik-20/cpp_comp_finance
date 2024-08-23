@@ -2,8 +2,8 @@ add_library(Options "")
 
 target_sources(
     Options
-    PRIVATE ${CMAKE_CURRENT_LIST_DIR}/Options01.cpp
-    PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Options01.h
+    PRIVATE ${CMAKE_CURRENT_LIST_DIR}/Options.cpp
+    PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Options.h
 )
 
 target_link_libraries(Options PRIVATE BinModel)

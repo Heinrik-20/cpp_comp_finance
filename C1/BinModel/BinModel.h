@@ -1,5 +1,5 @@
-#ifndef BinModel01_h
-#define BinModel01_h
+#ifndef BinModel_h
+#define BinModel_h
 
 //computing risk-neutral probability
 double RiskNeutProb(double U, double D, double R);
