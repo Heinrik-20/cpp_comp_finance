@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
 
     //compute stock price at node n,i
 
-    if (i >= n) { // TODO: Exercise 1, refactor
+    if (i >= n) {
         cout << "Input invalid" << endl;
         cout << "Terminating program" << endl;
         return 1;
@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
     cout << "U = " << U << endl;
     cout << "D = " << D << endl;
 
-    interchange(U, D); // TODO: Exercise 2, refactor
+    interchange(U, D);
 
     cout << "U = " << U << endl;
     cout << "D = " << D << endl;
