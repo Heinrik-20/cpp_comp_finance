@@ -10,6 +10,14 @@ class BinModel
       double R;
 
    public:
+
+      BinModel(double S0_, double U_, double D_, double R_) {
+         S0 = S0_;
+         U = U_;
+         D = D_;
+         R = R_;
+      }
+
       //computing risk-neutral probability
       double RiskNeutProb();
 

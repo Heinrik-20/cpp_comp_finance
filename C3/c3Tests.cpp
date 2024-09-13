@@ -4,49 +4,50 @@
 #include "Oracle.h"
 #include "BinLattice.h"
 
+using namespace std;
+
 TEST(C3Tests, Exercise1Test) {
-    int K = 100,
-    int N = 5
+    int K = 90;
+    int N = 2;
     double S0 = 100, U = 0.3, D = 0.1, R = 0.15;
 
     BinModel Model(S0, U, D, R);
 
     Call MyEur;
-    OracleCall Oracle;
+    OracleCall OracleEur;
 
-    MyEur.setN(N);
-    OracleEur.setN(N);
+    MyEur.SetN(N);
+    OracleEur.SetN(N);
 
-    BinLattice MyPriceTree;
-    BinLattice OraclePriceTree;
+    BinLattice<double> MyPriceTree;
+    BinLattice<double> OraclePriceTree;
 
-    BinLattice MyMoneyAccount;
-    BinLattice MyStockAccount;
+    BinLattice<double> MyMoneyAccount;
+    BinLattice<double> MyStockAccount;
 
-    BinLattice OracleMoneyAccount;
-    BinLattice OracleStockAccount;
+    BinLattice<double> OracleMoneyAccount;
+    BinLattice<double> OracleStockAccount;
+   
 
     MyEur.PriceByCRR(
         Model,
         MyPriceTree,
-        MyMoneyAccount,
         MyStockAccount,
+        MyMoneyAccount
     );
 
-    MyEur.PriceByCRR(
+    OracleEur.PriceByCRR(
         Model,
         OraclePriceTree,
-        OracleMoneyAccount,
         OracleStockAccount,
+        OracleMoneyAccount
     );
 
     for (int n=0; n < N; n++) {
         for (int i=0;i<=n;i++) {
             EXPECT_DOUBLE_EQ(MyPriceTree.GetNode(n, i), OraclePriceTree.GetNode(n, i));
             EXPECT_DOUBLE_EQ(MyMoneyAccount.GetNode(n, i), OracleMoneyAccount.GetNode(n, i));
-            EXPECT_DOUBLE_EQ(MyStockTree.GetNode(n, i), OracleStockTree.GetNode(n, i));
+            EXPECT_DOUBLE_EQ(MyStockAccount.GetNode(n, i), OracleStockAccount.GetNode(n, i));
         }
     }
-
-
 }

@@ -19,7 +19,12 @@ class EurOption: public virtual Option
 {
    public:
       //pricing European option
-      double PriceByCRR(BinModel Model);
+      double PriceByCRR(
+         BinModel Model, 
+         BinLattice<double>& PriceTree,
+         BinLattice<double>& moneyAccount,
+         BinLattice<double>& stockAccount
+      );
 };
 
 class AmOption: public virtual Option

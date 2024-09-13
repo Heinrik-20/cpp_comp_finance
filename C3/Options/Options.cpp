@@ -8,45 +8,44 @@ using namespace std;
 double EurOption::PriceByCRR(
    BinModel Model, 
    BinLattice<double>& PriceTree,
-   BinLattice<double>& moneyAccount,
    BinLattice<double>& stockAccount,
-)
-{
+   BinLattice<double>& moneyAccount
+) {
    double q=Model.RiskNeutProb();
    int N=GetN();
-   PriceTree.setN(N);
-   moneyAccount.setN(N);
-   stockAccount.setN(N);
+   PriceTree.SetN(N);
+   moneyAccount.SetN(N);
+   stockAccount.SetN(N);
 
    for (int i=0; i<=N; i++)
    {
       PriceTree.SetNode(N,i,Payoff(Model.S(N,i)));
    }
-   for (int n=N-1; n>=0; n--)
+   
+   for (int n=N-1;n>=0; n--)
    {
       for (int i=0; i<=n; i++)
-      {
-         
-         stockAccount.SetNode(
-            n,
-            i,
-            (PriceTree.GetNode(n, i) - PriceTree.GetNode(n, i+1)) / (Model.S(n, i+1) - Model.S(n, i))
-         );
-
-         moneyAccount.SetNode(
-            n,
-            i,
-            (PriceTree.GetNode(n-1, i) - (stockAccount.GetNode(n, i) * Model.S(n-1, i))) / (1 + Model.GetR())
-         );
-
+      {  
          PriceTree.SetNode(
             n,
             i,
             (q*PriceTree.GetNode(n+1,i+1) +(1-q)*PriceTree.GetNode(n+1,i)) / (1+Model.GetR())
          );
+
+         stockAccount.SetNode(
+            n,
+            i,
+            (PriceTree.GetNode(n+1, i+1) - PriceTree.GetNode(n+1, i)) / (Model.S(n+1, i+1) - Model.S(n+1, i))
+         );
+
+         moneyAccount.SetNode(
+            n,
+            i,
+            (PriceTree.GetNode(n, i) - (stockAccount.GetNode(n, i) * Model.S(n, i))) / pow((1 + Model.GetR()), n)
+         );
       }
    }
-   return Price[0];
+   return PriceTree.GetNode(0, 0);
 }
 
 double AmOption::PriceBySnell(BinModel Model,

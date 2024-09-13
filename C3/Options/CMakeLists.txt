@@ -6,7 +6,7 @@ target_sources(
     PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Options.h
 )
 
-target_link_libraries(Options PRIVATE BinModel)
+target_link_libraries(Options PRIVATE BinModel BinLattice)
 
 target_include_directories(
     Options
