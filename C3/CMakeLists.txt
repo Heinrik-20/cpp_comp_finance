@@ -26,10 +26,13 @@ add_executable(main main.cpp)
 add_library(BinLattice INTERFACE)
 target_include_directories(BinLattice INTERFACE ${CMAKE_CURRENT_LIST_DIR}/BinLattice)
 
+add_library(BSModel INTERFACE)
+target_include_directories(BSModel INTERFACE ${CMAKE_CURRENT_LIST_DIR}/BSModel)
+
 add_subdirectory(BinModel)
 add_subdirectory(Options)
 
-target_link_libraries(main PRIVATE BinLattice Options BinModel)
+target_link_libraries(main PRIVATE BinLattice Options BinModel BSModel)
 
 enable_testing()
 
@@ -37,7 +40,7 @@ add_executable(CPPNumerical ${CMAKE_CURRENT_LIST_DIR}/c3Tests.cpp)
 
 add_subdirectory(Oracle)
 
-target_link_libraries(CPPNumerical BinLattice Oracle BinModel Options)
+target_link_libraries(CPPNumerical BinLattice Oracle BinModel Options BSModel)
 target_link_libraries(CPPNumerical GTest::gtest_main)
 
 include(GoogleTest)
